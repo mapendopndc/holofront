@@ -4,9 +4,9 @@
   "description": "Front-end of Holospace app",
   "main": "index.js",
   "scripts": {
-    "dev": "next",
+    "dev": "next -p 8081",
     "build": "next build",
-    "start": "next start"
+    "start": "next start -p 8081"
   },
   "repository": {
     "type": "git",
