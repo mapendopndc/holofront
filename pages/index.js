@@ -1,0 +1,1 @@
+export default () => (<div>Holofront Website</div>);
