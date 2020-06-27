@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
 import { authenticate } from '../store/actions/authActions'
+import { register } from '../store/actions/authActions'
 import { Modal, Form, Button } from 'react-bootstrap'
 
 class ModalForm extends React.Component {
@@ -39,8 +40,12 @@ class ModalForm extends React.Component {
             email: this.state.email,
             password: this.state.password
         }
-
-        this.props.authenticate(userInfo);
+        if (this.props.form_mode == "Login") {
+            this.props.authenticate(userInfo)
+        } else {
+            this.props.register(userInfo)
+        }
+        
 
         const authForm = document.getElementById("authForm")
         authForm.reset()
@@ -80,7 +85,8 @@ class ModalForm extends React.Component {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        authenticate: (userInfo) => { dispatch(authenticate(userInfo))}
+        authenticate: (userInfo) => { dispatch(authenticate(userInfo))},
+        register: (userInfo) => { dispatch(register(userInfo))}
     }
 }
 
