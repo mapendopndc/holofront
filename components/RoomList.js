@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 class RoomList extends React.Component {
     render() {
         return (
-            <div>Token: {this.props.token}</div>
+            <div>Room List</div>
         )
     }
 }

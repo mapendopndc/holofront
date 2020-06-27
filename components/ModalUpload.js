@@ -1,12 +1,12 @@
 import { connect } from 'react-redux'
-import { authenticate } from '../store/actions/authActions'
 import { Modal, Form, Button } from 'react-bootstrap'
+import { create_room } from '../store/actions/roomActions'
 
 class ModalForm extends React.Component {
 
     state = {
-        email: '',
-        password: '',
+        roomName: '',
+        file: null,
         show: false
     }
 
@@ -21,6 +21,7 @@ class ModalForm extends React.Component {
 
     handleClose = () => {
         this.setState({
+            ...this.state,
             show: false
         })
     }
@@ -35,18 +36,17 @@ class ModalForm extends React.Component {
     handleSubmit = (e) => {
         e.preventDefault()
 
-        const userInfo = {
-            email: this.state.email,
-            password: this.state.password
-        }
+        const roomData = new FormData()
+        roomData.append('name', this.state.roomName)
+        roomData.append('arModel', file)
 
-        this.props.authenticate(userInfo);
+        this.props.create_room(roomData, this.props.token);
 
-        const authForm = document.getElementById("authForm")
+        const authForm = document.getElementById("roomForm")
         authForm.reset()
         this.setState({
-            email: '',
-            password: ''
+            ...this.state,
+            roomName: ''
         })
 
         this.handleClose(); // Bug: Must only close if successfully authenticated
@@ -56,20 +56,19 @@ class ModalForm extends React.Component {
         return (
             <Modal show={this.state.show} onHide={this.handleClose}>
             <Modal.Header closeButton>
-                <Modal.Title>{this.props.form_mode}</Modal.Title>
+                <Modal.Title>New Room</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Form onSubmit={this.handleSubmit} id="authForm">
+                <Form onSubmit={this.handleSubmit} id="roomForm">
                     <Form.Group>
-                        <Form.Label>Email address</Form.Label>
-                        <Form.Control type="email" placeholder="Enter email" name="email" onChange={this.handleChange}/>
+                        <Form.Label>Room name</Form.Label>
+                        <Form.Control type="text" placeholder="Enter Room Name" name="roomName" onChange={this.handleChange}/>
                     </Form.Group>
                     <Form.Group>
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control type="password" placeholder="Password" name="password" onChange={this.handleChange}/>
+                        <Form.File id="exampleFormControlFile1" label="AR Model (.zip)" />
                     </Form.Group>
                     <Button variant="primary" type="submit" className="float-right">
-                        {this.props.form_mode}
+                        Create
                     </Button>
                 </Form>
             </Modal.Body>
@@ -80,8 +79,15 @@ class ModalForm extends React.Component {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        authenticate: (userInfo) => { dispatch(authenticate(userInfo))}
+        create_room: (roomInfo) => { dispatch(create_room(roomInfo))}
     }
 }
 
-export default connect(null, mapDispatchToProps)(ModalForm);
+const mapStateToProps = (state) => {
+    console.log(state)
+    return {
+        token: state.auth.token
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ModalForm);

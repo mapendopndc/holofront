@@ -1,17 +1,31 @@
 import Head from 'next/head'
-import Navbar from '../components/Navbar'
+import Navbar from './Navbar'
+import Optionsbar from './Optionsbar'
+import { connect } from 'react-redux'
 
-const Layout = (props) => (
-    <div>
+const Layout = (props) => {
+
+    const links = props.token ? <Optionsbar/> : <Navbar />
+
+    return (
+        <div>
         <Head>
             <title>Holospace</title>
             {/*<link rel="icon" href="/favicon.png" />*/}
             <link rel="stylesheet" href="https://use.typekit.net/dxb3emo.css" />
         </Head>
 
-        <Navbar />
+        {links}
         {props.children}
-    </div>
-)
+        </div>
+    )
+}
 
-export default Layout;
+const mapStateToProps = (state) => {
+    console.log(state)
+    return {
+        token: state.auth.token
+    }
+}
+
+export default connect(mapStateToProps)(Layout);
