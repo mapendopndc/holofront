@@ -2,7 +2,7 @@ import axios from 'axios';
 import { AUTHENTICATE } from '../types';
 
 // login user
-export const authenticate = (userInfo, type) => {
+export const authenticate = (userInfo) => {
   return (dispatch) => {
     axios.post('https://holospaceapp.com/api/user/login', userInfo)
       .then(res => {
