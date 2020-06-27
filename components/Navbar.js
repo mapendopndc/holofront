@@ -1,7 +1,7 @@
 import NavBar from 'react-bootstrap/Navbar'
 import {Nav, Button, Modal, Form} from 'react-bootstrap'
-
-import axios from 'axios'
+import { connect } from 'react-redux'
+import { authenticate } from '../store/actions/authActions'
 
 class Navbar extends React.Component {
 
@@ -38,14 +38,9 @@ class Navbar extends React.Component {
             email: this.state.email,
             password: this.state.password
         }
-        axios.post('https://holospaceapp.com/api/user/login', userInfo)
-            .then(res => {
-                console.log(res)
-            })
-            .catch(err => {
-                console.log(err)
-            })
         
+        this.props.authenticate(userInfo);
+
         const authForm = document.getElementById("authForm")
         authForm.reset()
         this.setState({
@@ -98,4 +93,16 @@ class Navbar extends React.Component {
 
 }
 
-export default Navbar;
+const mapStateToProps = (state) => {
+    return {
+        token: state.token
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        authenticate: (userInfo) => { dispatch(authenticate(userInfo, "login"))}
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar);
