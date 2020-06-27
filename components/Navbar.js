@@ -1,28 +1,101 @@
-import 'bootstrap/dist/css/bootstrap.min.css'
-
 import NavBar from 'react-bootstrap/Navbar'
-import Nav from 'react-bootstrap/Nav'
-import NavDropdown from 'react-bootstrap/NavDropdown'
-import Form from 'react-bootstrap/Form'
-import FormControl from 'react-bootstrap/FormControl'
-import Button from 'react-bootstrap/Button'
+import {Nav, Button, Modal, Form} from 'react-bootstrap'
 
-import Link from 'next/link'
+import axios from 'axios'
 
-const Navbar = () => (
-    <div>
-        <NavBar bg="light">
-            <NavBar.Brand>Holospace</NavBar.Brand>
-            <Nav className="ml-auto">
-                <Link href="/register" passHref>
-                    <Nav.Link>Register</Nav.Link>
-                </Link>
-                <Link href="/login" passHref>
-                    <Nav.Link>Login</Nav.Link>
-                </Link>
-            </Nav>
-        </NavBar>
-    </div>
-)
+class Navbar extends React.Component {
+
+    state = {
+        show: false,
+        form_mode: "Login",
+        email: '',
+        password: ''
+    }
+
+    handleClose = () => {
+        this.setState({
+            ...this.state,
+            show: false
+        })
+    }
+    handleShow = (mode) => {
+        this.setState({
+            show: true,
+            form_mode: mode
+        })
+    }
+
+    handleChange = (e) => {
+        this.setState({
+            ...this.state,
+            [e.target.name]: e.target.value
+        })
+    }
+
+    handleSubmit = (e) => {
+        e.preventDefault()
+        const userInfo = {
+            email: this.state.email,
+            password: this.state.password
+        }
+        axios.post('https://holospaceapp.com/api/user/login', userInfo)
+            .then(res => {
+                console.log(res)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        
+        const authForm = document.getElementById("authForm")
+        authForm.reset()
+        this.setState({
+            show: false,
+            form_mode: "Login",
+            email: '',
+            password: ''
+        })
+    }
+
+    render() {
+        const { show, form_mode } = this.state
+        return (
+            <>
+                <NavBar bg="light">
+                    <NavBar.Brand>Holospace</NavBar.Brand>
+                    <Nav className="ml-auto">
+                        <Button variant="primary" onClick={() => this.handleShow("Register")}>
+                            Register
+                        </Button>
+                        <Button variant="light" onClick={() => this.handleShow("Login")}>
+                            Login
+                        </Button>
+                    </Nav>
+                </NavBar>
+
+                <Modal show={show} onHide={this.handleClose}>
+                    <Modal.Header closeButton>
+                    <Modal.Title>{form_mode}</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                    <Form onSubmit={this.handleSubmit} id="authForm">
+                        <Form.Group>
+                            <Form.Label>Email address</Form.Label>
+                            <Form.Control type="email" placeholder="Enter email" name="email" onChange={this.handleChange}/>
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control type="password" placeholder="Password" name="password" onChange={this.handleChange}/>
+                        </Form.Group>
+                        <Button variant="primary" type="submit" className="float-right">
+                            {this.state.form_mode}
+                        </Button>
+                    </Form>
+                    </Modal.Body>
+                </Modal>
+            </>
+        )
+    }
+
+}
 
 export default Navbar;
