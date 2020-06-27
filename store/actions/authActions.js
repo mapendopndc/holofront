@@ -6,8 +6,8 @@ export const authenticate = (userInfo) => {
   return (dispatch) => {
     axios.post('https://holospaceapp.com/api/user/login', userInfo)
       .then(res => {
-        console.log(res.data.token)
-        dispatch({type: AUTHENTICATE, payload: res.data.token})
+        console.log(res.data)
+        dispatch({type: AUTHENTICATE, payload: res.data})
       })
       .catch(err => {
         console.log(err)

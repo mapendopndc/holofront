@@ -33,12 +33,23 @@ class ModalForm extends React.Component {
         })
     }
 
+    handleFile = (e) => {
+        
+        this.setState({
+            ...this.state,
+            file: e.target.files[0]
+        })
+    }
+
     handleSubmit = (e) => {
         e.preventDefault()
 
         const roomData = new FormData()
         roomData.append('name', this.state.roomName)
-        roomData.append('arModel', file)
+        roomData.append('creatorId', this.props.user_id)
+        roomData.append('arModel', this.state.file)
+
+        console.log(this.props.token)
 
         this.props.create_room(roomData, this.props.token);
 
@@ -65,7 +76,7 @@ class ModalForm extends React.Component {
                         <Form.Control type="text" placeholder="Enter Room Name" name="roomName" onChange={this.handleChange}/>
                     </Form.Group>
                     <Form.Group>
-                        <Form.File id="exampleFormControlFile1" label="AR Model (.zip)" />
+                        <Form.File id="exampleFormControlFile1" label="AR Model (.zip)" onChange={this.handleFile}/>
                     </Form.Group>
                     <Button variant="primary" type="submit" className="float-right">
                         Create
@@ -79,14 +90,15 @@ class ModalForm extends React.Component {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        create_room: (roomInfo) => { dispatch(create_room(roomInfo))}
+        create_room: (roomData, token) => { dispatch(create_room(roomData, token))}
     }
 }
 
 const mapStateToProps = (state) => {
     console.log(state)
     return {
-        token: state.auth.token
+        token: state.auth.token,
+        user_id: state.auth.user_id
     }
 }
 
