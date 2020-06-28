@@ -1,3 +1,6 @@
+import { connect } from 'react-redux'
+import { deauthenticate } from '../store/actions/authActions'
+
 import NavBar from 'react-bootstrap/Navbar'
 import {Nav, Button} from 'react-bootstrap'
 import ModalUpload from './ModalUpload'
@@ -23,7 +26,7 @@ class Optionsbar extends React.Component {
     }
 
     handleLogout = () => {
-
+        this.props.logout()
     }
 
     
@@ -50,4 +53,10 @@ class Optionsbar extends React.Component {
 
 }
 
-export default Optionsbar;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        logout: () => { dispatch(deauthenticate())}
+    }
+}
+
+export default connect(null, mapDispatchToProps)(Optionsbar);

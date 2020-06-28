@@ -1,5 +1,23 @@
 import axios from 'axios';
-import { AUTHENTICATE, REGISTER, ROOMS } from '../types';
+import { AUTHENTICATE, DEAUTHENTICATE, REGISTER, ROOMS } from '../types';
+
+// register user
+export const register = (userInfo) => {
+  return (dispatch) => {
+    axios.post('https://holospaceapp.com/api/user/signup', userInfo)
+      .then(res => {
+        console.log(res)
+        dispatch({type: REGISTER, payload: res.data})
+      })
+      .then(res => {
+        dispatch(authenticate(userInfo))
+      }
+      )
+      .catch(err => {
+        console.log(err)
+      });
+  };
+};
 
 // login user
 export const authenticate = (userInfo) => {
@@ -28,16 +46,9 @@ export const authenticate = (userInfo) => {
   };
 };
 
-// register user
-export const register = (userInfo) => {
+// logout user
+export const deauthenticate = () => {
   return (dispatch) => {
-    axios.post('https://holospaceapp.com/api/user/signup', userInfo)
-      .then(res => {
-        console.log(res)
-        dispatch({type: REGISTER, payload: res.data})
-      })
-      .catch(err => {
-        console.log(err)
-      });
+    dispatch({type: DEAUTHENTICATE})
   };
 };

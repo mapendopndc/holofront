@@ -27,12 +27,12 @@ export const create_room = (roomData, token) => {
 export const invite = (email, roomInfo, token) => {
   
   return (dispatch) => {
-    axios.get('http://localhost:8082/user/id/' + email)
+    axios.get('https://holospaceapp.com/api/user/id/' + email)
       .then(res => {
         console.log(res)
         console.log (token)
         return axios({
-          url: 'http://localhost:8082/rooms/' + roomInfo._id,
+          url: 'https://holospaceapp.com/api/rooms/' + roomInfo._id,
           method: "PATCH",
           headers: {
             Authorization: "Bearer " + token

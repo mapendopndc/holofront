@@ -1,4 +1,4 @@
-import { CREATE_ROOM, ROOMS, INVITE } from '../types';
+import { CREATE_ROOM, ROOMS, INVITE, DEAUTHENTICATE } from '../types';
 
 const initialState = {
   rooms: []
@@ -25,6 +25,8 @@ export default (state = initialState, action) => {
         })
         console.log(updatedRooms)
       return {rooms: updatedRooms}
+    case DEAUTHENTICATE:
+      return {rooms: []}
     default:
       return state;
   }
