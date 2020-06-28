@@ -1,6 +1,7 @@
 import NavBar from 'react-bootstrap/Navbar'
-import {Nav, Button, Modal} from 'react-bootstrap'
+import {Nav, Button} from 'react-bootstrap'
 import ModalUpload from './ModalUpload'
+import '../styles/optionsbar.css'
 
 class Optionsbar extends React.Component {
 
@@ -21,19 +22,22 @@ class Optionsbar extends React.Component {
         })
     }
 
+    handleLogout = () => {
+
+    }
 
     
     render() {
         const { show } = this.state
         return (
             <>
-            <NavBar bg="light">
+            <NavBar bg="light" fixed="top">
                 <NavBar.Brand>Holospace</NavBar.Brand>
                 <Nav className="ml-auto">
-                    <Button variant="primary" onClick={() => this.handleShow("Register")}>
+                    <Button variant="primary" onClick={() => this.handleShow("Register")} className="new-room">
                         New Room
                     </Button>
-                    <Button variant="light" onClick={() => this.handleShow("Login")}>
+                    <Button variant="light" onClick={this.handleLogout}>
                         Logout
                     </Button>
                 </Nav>

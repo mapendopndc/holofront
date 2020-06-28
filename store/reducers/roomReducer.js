@@ -1,13 +1,30 @@
-import { CREATE_ROOM } from '../types';
+import { CREATE_ROOM, ROOMS, INVITE } from '../types';
 
 const initialState = {
-  data: null
+  rooms: []
 };
 
 export default (state = initialState, action) => {
+  const data = action.payload;
   switch (action.type) {
+    case ROOMS:
+      return {rooms: data}
     case CREATE_ROOM:
-      return {...state, data: action.payload}
+      return {rooms: [...state.rooms, {users: data.users, _id: data._id, name: data.name}]}
+      case INVITE:
+        console.log(state.rooms)
+        var updatedRooms = state.rooms.map( room => {
+          if (room._id === data._id) {
+            return {
+              ...room,
+              users: data.users
+            }
+          } else {
+            return { ...room }
+          }
+        })
+        console.log(updatedRooms)
+      return {rooms: updatedRooms}
     default:
       return state;
   }

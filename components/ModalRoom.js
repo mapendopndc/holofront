@@ -1,13 +1,15 @@
 import { connect } from 'react-redux'
-import { authenticate } from '../store/actions/authActions'
-import { register } from '../store/actions/authActions'
+import { authenticate, register } from '../store/actions/authActions'
+import { invite } from '../store/actions/roomActions'
 import { Modal, Form, Button } from 'react-bootstrap'
+import '../styles/modalroom.css'
 
 class ModalRoom extends React.Component {
 
     state = {
         email: '',
-        show: false
+        show: false,
+        btnText: "Copy Room Code"
     }
 
     componentDidUpdate() {
@@ -21,6 +23,7 @@ class ModalRoom extends React.Component {
 
     handleClose = () => {
         this.setState({
+            ...this.state,
             show: false
         })
     }
@@ -32,10 +35,25 @@ class ModalRoom extends React.Component {
         })
     }
 
+    handleCopy = (e) => {
+        e.persist()
+        navigator.clipboard.writeText(this.props.roomInfo._id)
+        .then(res => {
+            console.log("Copied " + this.props.roomInfo._id + " to clipboard")
+            this.setState({
+                ...this.state,
+                btnText: "Copied"
+            })
+        })
+        .catch(err => {
+            console.error('Could not copy text: ', err);
+        });
+    }
+
     handleSubmit = (e) => {
         e.preventDefault()
 
-        // this.props.add_friend(roomInfo)
+        this.props.invite(this.state.email, this.props.roomInfo, this.props.token)
 
         const authForm = document.getElementById("authForm")
         authForm.reset()
@@ -54,6 +72,9 @@ class ModalRoom extends React.Component {
                 <Modal.Title>Add Friend to Room</Modal.Title>
             </Modal.Header>
             <Modal.Body>
+                <Button variant="primary" className="copy d-flex justify-content-center" onClick={this.handleCopy}>
+                    {this.state.btnText}
+                </Button>
                 <Form onSubmit={this.handleSubmit} id="authForm">
                     <Form.Group>
                         <Form.Label>Email address</Form.Label>
@@ -72,8 +93,16 @@ class ModalRoom extends React.Component {
 const mapDispatchToProps = (dispatch) => {
     return {
         authenticate: (userInfo) => { dispatch(authenticate(userInfo))},
-        register: (userInfo) => { dispatch(register(userInfo))}
+        register: (userInfo) => { dispatch(register(userInfo))},
+        invite: (email, roomInfo, token) => { dispatch(invite(email, roomInfo, token))}
     }
 }
 
-export default connect(null, mapDispatchToProps)(ModalRoom);
+const mapStateToProps = (state) => {
+    console.log(state)
+    return {
+        token: state.auth.token
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ModalRoom);

@@ -1,8 +1,8 @@
-import { AUTHENTICATE, DEAUTHENTICATE, USER, REGISTER } from '../types';
+import { AUTHENTICATE, REGISTER } from '../types';
 
 const initialState = {
   token: null,
-  user_id: null,
+  user_id: null
 };
 
 export default (state = initialState, action) => {
