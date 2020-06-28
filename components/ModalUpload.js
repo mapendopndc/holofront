@@ -49,8 +49,6 @@ class ModalForm extends React.Component {
         roomData.append('creatorId', this.props.user_id)
         roomData.append('arModel', this.state.file)
 
-        console.log(this.props.token)
-
         this.props.create_room(roomData, this.props.token);
 
         const authForm = document.getElementById("roomForm")

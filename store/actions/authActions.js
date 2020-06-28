@@ -6,7 +6,6 @@ export const register = (userInfo) => {
   return (dispatch) => {
     axios.post('https://holospaceapp.com/api/user/signup', userInfo)
       .then(res => {
-        console.log(res)
         dispatch({type: REGISTER, payload: res.data})
       })
       .then(res => {
@@ -24,7 +23,6 @@ export const authenticate = (userInfo) => {
   return (dispatch) => {
     axios.post('https://holospaceapp.com/api/user/login', userInfo)
       .then(res => {
-        console.log(res.data)
         dispatch({type: AUTHENTICATE, payload: res.data})
         return res.data
       })

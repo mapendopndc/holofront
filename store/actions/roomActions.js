@@ -14,7 +14,6 @@ export const create_room = (roomData, token) => {
         data: roomData
     })
       .then(res => {
-        console.log(res)
         dispatch({type: CREATE_ROOM, payload: res.data.createdRoom})
       })
       .catch(err => {
@@ -29,8 +28,6 @@ export const invite = (email, roomInfo, token) => {
   return (dispatch) => {
     axios.get('https://holospaceapp.com/api/user/id/' + email)
       .then(res => {
-        console.log(res)
-        console.log (token)
         return axios({
           url: 'https://holospaceapp.com/api/rooms/' + roomInfo._id,
           method: "PATCH",
@@ -43,7 +40,6 @@ export const invite = (email, roomInfo, token) => {
         })
       })
       .then(res => {
-        console.log(res)
         dispatch({type: INVITE, payload: {users: res.data.users, _id: roomInfo._id}})
       })
       .catch(err => {

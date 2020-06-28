@@ -11,7 +11,6 @@ class RoomList extends React.Component {
     }
 
     handleShow = (roomInfo) => {
-        console.log("You clicked on " + roomInfo.name)
         this.setState({
             show: true,
             roomInfo
@@ -47,7 +46,6 @@ class RoomList extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-    console.log(state)
     return {
         rooms: state.room.rooms
     }
