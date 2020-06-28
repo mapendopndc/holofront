@@ -93,7 +93,6 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 const mapStateToProps = (state) => {
-    console.log(state)
     return {
         token: state.auth.token,
         user_id: state.auth.user_id
